@@ -1,0 +1,42 @@
+// index.js
+
+const express = require('express');
+const app = express();
+
+app.use(express.json());  // Middleware to parse JSON requests
+
+// Sample data (in-memory)
+let users = [
+  { id: 1, name: 'Marathe' },
+  { id: 2, name: 'Patil' }
+];
+
+// GET all users
+app.get('/users', (req, res) => {
+  res.json(users);
+});
+
+// GET user by ID
+app.get('/users/:id', (req, res) => {
+  const user = users.find(u => u.id === parseInt(req.params.id));
+  if (!user) return res.status(404).send('User not found');
+  res.json(user);
+});
+
+// POST to create a new user
+app.post('/users', (req, res) => {
+  const user = {
+    id: users.length + 1,
+    name: req.body.name
+  };
+  users.push(user);
+  res.status(201).json(user);
+});
+
+// Start server on port 3000
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+
